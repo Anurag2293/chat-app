@@ -9,14 +9,31 @@
 <body>
     <h1>Chat App</h1>
 
+    <div id="messages"></div>
+
     <form action="/" id="message-form">
         <input name="message" type="text" placeholder="message">
-        <button >Send</button>
+        <button>Send</button>
     </form>
 
     <button id="send-location">Send Location</button>
 
+    <script id="message-template" type="text/html">
+        <div>
+            <p>{{message}}</p>
+        </div>
+    </script>
 
+    <script id="location-message-template" type="text/html">
+        <div>
+            <p><a href="{{url}}" target="_blank">My Current Location</a></p>
+        <div>
+    </script>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" integrity="sha512-CryKbMe7sjSCDPl18jtJI5DR5jtkUWxPXWaLCst6QjH8wxDexfRJic2WRmRXmstr2Y8SxDDWuBO6CQC6IE4KTA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.11.0/qs.min.js" integrity="sha512-/l6vieC+YxaZywUhmqs++8uF9DeMvJE61ua5g+UK0TuHZ4TkTgB1Gm1n0NiA86uEOM9JJ6JUwyR0hboKO0fCng==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/chat.js"></script>
 </body>
