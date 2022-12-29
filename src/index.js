@@ -12,20 +12,22 @@ const port = process.env.PORT || 3000;
 
 app.use(express.static(publicDirectoryPath));
 
-let count = 0;
-
-// server(emit) -> client (receive) - countUpdated
-// client (emit) -> server (receive) - increment
-
 io.on('connection', (socket) => {
     console.log('New WebSocket connection');
 
-    socket.emit('countUpdated', count)
+    socket.emit('message', 'Welcome');
+    socket.broadcast.emit('message', 'A new user has joined!');
 
-    socket.on('increment', () => {
-        count++;
-        // socket.emit('countUpdated', count); // This one emits to the single connection
-        io.emit('countUpdated', count); // This one emits to every single / all connections
+    socket.on('sendMessage', (message) => {
+        io.emit('message', message);
+    })
+
+    socket.on('sendLocation', ({ latitude, longitude }) => {
+        io.emit('message', `https://google.com/maps?q=${latitude},${longitude}`)
+    })
+
+    socket.on('disconnect', () => {
+        io.emit('message', 'A user has left!')
     })
 })
 
