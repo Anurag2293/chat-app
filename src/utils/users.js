@@ -1,10 +1,5 @@
 const users = [];
 
-/**
- * 
- * @param {object} {id, username, room}
- * @returns {object} {error, user}
- */
 export const addUser = ({ id, username, room }) => {
     // Clean the data
     username = username.trim().toLowerCase();
@@ -35,11 +30,6 @@ export const addUser = ({ id, username, room }) => {
     return { user };
 }
 
-/**
- * 
- * @param {Number} id 
- * @returns {Object} user
- */
 export const removeUser = (id) => {
     const index = users.findIndex(user => user.id === id);
 

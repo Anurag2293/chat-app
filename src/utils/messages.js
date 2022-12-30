@@ -4,8 +4,9 @@
  * @returns {object} An object of {text, createdAt}
  */
 
-export const generateMessage = (text) => {
+export const generateMessage = (username, text) => {
     return {
+        username,
         text,
         createdAt : new Date().getTime()
     }
@@ -13,13 +14,15 @@ export const generateMessage = (text) => {
 
 /**
  * 
- * @param {string} url Uniform Resource Locater
+ * @param {string} username
+ * @param {object} coords { latitude, longitude }
  * @returns {object}  An object of {url, createdAt}
  */
 
-export const generateLocationMessage = (url) => {
+export const generateLocationMessage = (username, coords) => {
     return {
-        url,
+        username,
+        url : `https://google.com/maps?q=${coords.latitude},${coords.longitude}`,
         createdAt : new Date().getTime()
     }
 }
