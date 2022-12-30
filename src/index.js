@@ -5,6 +5,7 @@ import Filter from 'bad-words';
 
 import { publicDirectoryPath } from './utils/paths.js';
 import { generateMessage, generateLocationMessage } from './utils/messages.js';
+import { addUser, removeUser, getUser, getUsersInRoom } from './utils/users.js';
 
 const app = express();
 const server = http.createServer(app); // Done behind the scenes
