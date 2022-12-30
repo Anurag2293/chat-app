@@ -14,12 +14,32 @@ const port = process.env.PORT || 3000;
 
 app.use(express.static(publicDirectoryPath));
 
+/**
+ * @function Connection contains listening and Emition functions 
+ * @io refers to the server
+ * @on for listening to the connection emition
+ * @description Tells the server what to do when it gets a new connection
+ * @callback socket_object Representing the new connection
+ */
 io.on('connection', (socket) => {
     console.log('New WebSocket connection');
 
-    socket.emit('message', generateMessage('Welcome'));
-    socket.broadcast.emit('message', generateMessage('A new user has joined!'));
+    socket.on('join', ({username, room}) => {
+        socket.join(room);
 
+        /**
+         * @emits message to the newly connected user
+         */
+        socket.emit('message', generateMessage('Welcome'));
+        socket.broadcast.to(room).emit('message', generateMessage(`${username} has joined!`));
+
+    })
+
+    /**
+     * @listens message & checks profanity
+     * @emits message to all users
+     * @callback Acknowledgement if successfully sent message
+     */
     socket.on('sendMessage', (message, callback) => {
         const filter = new Filter();
 
@@ -27,10 +47,15 @@ io.on('connection', (socket) => {
             return callback('Profanity is not allowed');
         }
 
-        io.emit('message', generateMessage(message));
+        io.to('NIT').emit('message', generateMessage(message));
         callback();
     })
 
+    /**
+     * @listens location
+     * @emits locatioin to all users
+     * @callback Acknowledgement if successfully sent location
+     */
     socket.on('sendLocation', (coords, callback) => {
         io.emit('locationMessage', generateLocationMessage(`https://google.com/maps?q=${coords.latitude},${coords.longitude}`));
         callback();

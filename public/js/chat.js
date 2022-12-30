@@ -14,8 +14,15 @@ const $messages = document.querySelector('#messages');
 const messageTemplate = document.querySelector('#message-template').innerHTML;
 const locationTemplate = document.querySelector('#location-message-template').innerHTML;
 
+// Options
+const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
 
 // Receiving data (Listening)
+
+/**
+ * @listens Message
+ * @description Sends the message received to the messages element using the message template
+ */
 socket.on('message', (message) => {
     console.log(message);
     const html = Mustache.render(messageTemplate, {
@@ -25,6 +32,11 @@ socket.on('message', (message) => {
     $messages.insertAdjacentHTML('beforeend', html);
 });
 
+
+/**
+ * @listens Location 
+ * @description Sends the location received to the messages element using the location template
+ */
 socket.on('locationMessage', (message) => {
     console.log(message);
     const html = Mustache.render(locationTemplate, {
@@ -35,6 +47,11 @@ socket.on('locationMessage', (message) => {
 })
 
 // Sending data (Emiting)
+
+/**
+ * @emits Message typed by the user
+ * @callback Error_Checking & Acknowledge that message is Delivered
+ */
 $messageForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -57,6 +74,10 @@ $messageForm.addEventListener('submit', (e) => {
     });
 })
 
+/**
+ * @emits Location 
+ * @callback Acknowledgement
+ */
 $sendLocationButton.addEventListener('click', () => {
     if (!navigator.geolocation) {
         return alert('Geolocation is not supported by your browser');
@@ -74,4 +95,10 @@ $sendLocationButton.addEventListener('click', () => {
             console.log('Location shared!');
         });
     })
-})
+});
+
+
+/**
+ * @emits Usernname_Room of the user signing up
+ */
+socket.emit('join', { username, room })
